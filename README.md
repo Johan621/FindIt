@@ -76,6 +76,38 @@ npm run dev
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
+## 🚀 Deployment
+
+### Backend on Render
+
+1. Create a new Render Web Service from this repository.
+2. Set the root directory to `server`.
+3. Use `npm install` as the build command.
+4. Use `npm start` as the start command.
+5. Add these environment variables in Render:
+   - `MONGO_URI` = your MongoDB Atlas connection string
+   - `JWT_SECRET` = a long random secret
+   - `NODE_ENV` = `production`
+6. Deploy and copy the Render service URL, for example `https://your-service.onrender.com`.
+
+### Frontend on Vercel
+
+1. Create a new Vercel project from this repository.
+2. Set the root directory to `frontend`.
+3. Use `npm run build` as the build command.
+4. Set the output directory to `dist`.
+5. Add this environment variable in Vercel:
+   - `VITE_API_URL` = `https://your-service.onrender.com/api`
+6. Deploy the frontend and open the Vercel URL.
+
+### Why login/register fail after deployment
+
+The frontend API client falls back to `http://localhost:5000/api` when `VITE_API_URL` is not set. That works locally, but after deploying to Vercel it points to the user’s machine instead of the Render backend, so auth requests fail.
+
+## 📝 Notes
+
+- The backend can start with an in-memory MongoDB fallback for local development, but production deployments should use MongoDB Atlas through `MONGO_URI` so data persists.
+
 ## 📝 License
 
 MIT
