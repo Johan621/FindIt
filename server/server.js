@@ -2,28 +2,50 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+const dns = require('dns');
 
-let memoryServer;
-
+// Use reliable public DNS servers so Node's SRV lookups succeed in restricted networks
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+  console.log('Using public DNS servers for SRV lookups:', dns.getServers());
+} catch (e) {
+  console.warn('Could not set DNS servers:', e && e.message);
+}
 async function connectDatabase() {
   const mongoUri = process.env.MONGO_URI;
 
-  if (mongoUri) {
+  if (!mongoUri) {
+    console.error('❌ MONGO_URI is not set in environment. Aborting startup.');
+    process.exit(1);
+  }
+
+  const mongooseOptions = {
+    // keep server selection reasonably short so retries proceed
+    serverSelectionTimeoutMS: 10000,
+    // pool size to limit connections
+    maxPoolSize: 10,
+    tls: true,
+  };
+
+  const maxRetries = 3;
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      await mongoose.connect(mongoUri);
-      console.log('✅ MongoDB connected successfully');
+      console.log(`Attempting MongoDB Atlas connection (attempt ${attempt}/${maxRetries})...`);
+      await mongoose.connect(mongoUri, mongooseOptions);
+      console.log('✅ MongoDB connected successfully (Atlas)');
       return;
     } catch (err) {
-      console.warn('⚠️ Atlas connection failed, starting in-memory MongoDB fallback...');
-      console.warn(err.message);
+      console.error(`⚠️ Atlas connection attempt ${attempt} failed:`, err.message);
+      if (attempt < maxRetries) {
+        const delay = attempt * 2000;
+        console.log(`Retrying in ${delay / 1000}s...`);
+        await new Promise((res) => setTimeout(res, delay));
+      }
     }
   }
 
-  memoryServer = await MongoMemoryServer.create();
-  const memoryUri = memoryServer.getUri('lostandfound');
-  await mongoose.connect(memoryUri);
-  console.log('✅ In-memory MongoDB started successfully');
+  console.error('❌ Could not connect to MongoDB Atlas after multiple attempts. Exiting to ensure data is persisted to Atlas.');
+  process.exit(1);
 }
 
 async function startServer() {
