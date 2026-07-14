@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Calendar } from 'lucide-react';
 import API from '../api/axios';
 
 export default function ReportItem() {
@@ -50,8 +51,8 @@ export default function ReportItem() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden py-10 px-4">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.12),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(16,185,129,0.08),_transparent_26%),linear-gradient(180deg,_rgba(15,23,42,1)_0%,_rgba(2,6,23,1)_100%)]" />
+    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-x-hidden py-10 px-4">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.12),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(16,185,129,0.08),_transparent_26%),linear-gradient(180deg,_rgba(15,23,42,1)_0%,_rgba(2,6,23,1)_100%)] fixed" />
 
       <div className="relative max-w-lg mx-auto z-10">
         <button
@@ -169,14 +170,19 @@ export default function ReportItem() {
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
                 Date {formData.type === 'lost' ? 'Lost' : 'Found'}
               </label>
-              <input
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-                className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200 placeholder:text-slate-650"
-                required
-              />
+              <div className="relative">
+                <input
+                  type="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                  max={new Date().toISOString().split('T')[0]}
+                  min="2000-01-01"
+                  className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg pl-11 pr-4 py-3 outline-none transition duration-200 placeholder:text-slate-650 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100"
+                  required
+                />
+                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+              </div>
             </div>
 
             <div>
