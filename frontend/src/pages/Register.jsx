@@ -30,37 +30,34 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.15),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(34,197,94,0.1),_transparent_26%),linear-gradient(180deg,_rgba(15,23,42,1)_0%,_rgba(2,6,23,1)_100%)]" />
-      <div className="absolute left-1/2 top-[-8rem] h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
-
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
       <form
         onSubmit={handleSubmit}
-        className="relative bg-slate-900/60 border border-white/10 backdrop-blur-xl p-8 rounded-2xl shadow-2xl w-full max-w-sm z-10"
+        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-xl shadow-lg w-full max-w-sm"
       >
         <div className="text-center mb-6">
-          <Link to="/" className="text-sm font-semibold tracking-[0.24em] text-cyan-200/65 uppercase hover:text-cyan-200 transition">
+          <Link to="/" className="text-sm font-bold tracking-tight text-blue-600 dark:text-blue-400 uppercase hover:underline">
             FindIt
           </Link>
-          <h2 className="text-3xl font-bold mt-2 text-white tracking-wide">
+          <h2 className="text-2xl font-bold mt-2 text-slate-900 dark:text-white">
             Create Account
           </h2>
         </div>
 
         {error && (
-          <p className="text-rose-400 bg-rose-500/10 border border-rose-500/20 text-sm mb-4 py-2 px-3 rounded-lg text-center">
+          <p className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 text-sm mb-4 py-2 px-3 rounded-md text-center font-medium">
             {error}
           </p>
         )}
         {success && (
-          <p className="text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 text-sm mb-4 py-2 px-3 rounded-lg text-center">
+          <p className="text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-900/50 text-sm mb-4 py-2 px-3 rounded-md text-center font-medium">
             {success}
           </p>
         )}
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Full Name
             </label>
             <input
@@ -69,13 +66,13 @@ export default function Register() {
               placeholder="John Doe"
               value={formData.name}
               onChange={handleChange}
-              className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200 placeholder:text-slate-600"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Email Address
             </label>
             <input
@@ -84,13 +81,13 @@ export default function Register() {
               placeholder="name@domain.com"
               value={formData.email}
               onChange={handleChange}
-              className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200 placeholder:text-slate-600"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Password
             </label>
             <input
@@ -99,36 +96,37 @@ export default function Register() {
               placeholder="••••••••"
               value={formData.password}
               onChange={handleChange}
-              className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200 placeholder:text-slate-600"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               required
             />
           </div>
+
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Role
             </label>
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200"
             >
-              <option value="student" className="bg-slate-900 text-white">Student</option>
-              <option value="admin" className="bg-slate-900 text-white">Admin</option>
+              <option value="student" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Student</option>
+              <option value="admin" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Admin</option>
             </select>
           </div>
         </div>
 
         <button
           type="submit"
-          className="w-full mt-6 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold py-3 rounded-full transition duration-200 uppercase tracking-wider text-sm cursor-pointer shadow-lg shadow-cyan-500/10"
+          className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-md transition duration-200 shadow-sm"
         >
           Register
         </button>
 
-        <p className="text-sm text-center mt-6 text-slate-400">
+        <p className="text-sm text-center mt-6 text-slate-600 dark:text-slate-400">
           Already have an account?{' '}
-          <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline">
+          <Link to="/login" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Login
           </Link>
         </p>

@@ -54,35 +54,33 @@ export default function ItemDetail() {
   };
 
   const statusColor = {
-    pending: 'bg-yellow-500/10 border border-yellow-500/25 text-yellow-400',
-    verified: 'bg-cyan-500/10 border border-cyan-500/25 text-cyan-400',
-    matched: 'bg-purple-500/10 border border-purple-500/25 text-purple-400',
-    recovered: 'bg-emerald-500/10 border border-emerald-500/25 text-emerald-400',
-    rejected: 'bg-rose-500/10 border border-rose-500/25 text-rose-400'
+    pending: 'bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-900/50',
+    verified: 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-900/50',
+    matched: 'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-900/50',
+    recovered: 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900/50',
+    rejected: 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/50'
   };
 
   if (loading) return <div className="text-center mt-20 text-slate-500 text-lg">Loading...</div>;
-  if (error) return <div className="text-center mt-20 text-rose-400 font-medium">{error}</div>;
+  if (error) return <div className="text-center mt-20 text-red-600 dark:text-red-400 font-medium">{error}</div>;
   if (!item) return null;
 
   const userId = user?.id || user?._id;
   const isOwner = item.reportedBy?._id === userId || item.reportedBy === userId;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden py-10 px-4">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.12),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(139,92,246,0.1),_transparent_28%)]" />
-
-      <div className="relative max-w-2xl mx-auto z-10">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 py-10 px-4">
+      <div className="max-w-2xl mx-auto">
         <button
           onClick={() => navigate(-1)}
-          className="text-cyan-400 hover:text-cyan-300 transition mb-6 inline-flex items-center gap-1 text-sm font-semibold cursor-pointer"
+          className="text-blue-600 dark:text-blue-400 hover:underline transition mb-6 inline-flex items-center gap-1 text-sm font-semibold cursor-pointer"
         >
           ← Back
         </button>
 
-        <div className="bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl overflow-hidden shadow-2xl">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
           {item.photoUrl && (
-            <div className="w-full h-80 overflow-hidden relative border-b border-white/10">
+            <div className="w-full h-80 overflow-hidden relative border-b border-slate-200 dark:border-slate-800">
               <img
                 src={item.photoUrl}
                 alt={item.title}
@@ -93,10 +91,10 @@ export default function ItemDetail() {
 
           <div className="p-8">
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-4">
-              <h1 className="text-3xl font-bold text-white tracking-tight">{item.title}</h1>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">{item.title}</h1>
               <div>
                 <span
-                  className={`text-xs px-3 py-1.5 rounded-full font-semibold uppercase tracking-wider ${statusColor[item.status]}`}
+                  className={`text-xs px-3 py-1.5 rounded-md font-semibold uppercase tracking-wider ${statusColor[item.status]}`}
                 >
                   {item.status}
                 </span>
@@ -105,39 +103,39 @@ export default function ItemDetail() {
 
             <div className="mb-6">
               <span
-                className={`inline-block text-xs px-3 py-1 rounded-full font-semibold ${
+                className={`inline-block text-xs px-3 py-1 rounded-md font-semibold ${
                   item.type === 'lost'
-                    ? 'bg-rose-500/10 border border-rose-500/20 text-rose-400'
-                    : 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'
+                    ? 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50'
+                    : 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900/50'
                 }`}
               >
                 {item.type.toUpperCase()}
               </span>
             </div>
 
-            <p className="text-slate-350 leading-relaxed mb-8 text-base bg-slate-950/20 border border-white/5 rounded-xl p-4">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 text-base bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4">
               {item.description}
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm bg-slate-950/40 border border-white/5 rounded-xl p-5 mb-8 text-slate-400">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 mb-8 text-slate-600 dark:text-slate-400">
               <div>
-                <span className="font-semibold text-slate-200">Category:</span> {item.category}
+                <span className="font-semibold text-slate-900 dark:text-slate-200">Category:</span> {item.category}
               </div>
               <div>
-                <span className="font-semibold text-slate-200">Location:</span> {item.location}
+                <span className="font-semibold text-slate-900 dark:text-slate-200">Location:</span> {item.location}
               </div>
               <div>
-                <span className="font-semibold text-slate-200">Date Reported:</span>{' '}
+                <span className="font-semibold text-slate-900 dark:text-slate-200">Date Reported:</span>{' '}
                 {new Date(item.date).toLocaleDateString()}
               </div>
               <div>
-                <span className="font-semibold text-slate-200">Reported by:</span>{' '}
+                <span className="font-semibold text-slate-900 dark:text-slate-200">Reported by:</span>{' '}
                 {item.reportedBy?.name || 'Unknown'}
               </div>
             </div>
 
             {error && (
-              <p className="text-rose-400 bg-rose-500/10 border border-rose-500/20 text-sm mb-4 py-2 px-3 rounded-lg text-center">
+              <p className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 text-sm mb-4 py-2 px-3 rounded-md text-center font-medium">
                 {error}
               </p>
             )}
@@ -147,7 +145,7 @@ export default function ItemDetail() {
                 <button
                   onClick={handleMarkRecovered}
                   disabled={updating}
-                  className="bg-emerald-500 hover:bg-emerald-455 text-slate-950 font-bold px-6 py-2.5 rounded-full transition cursor-pointer shadow-lg shadow-emerald-500/10 disabled:opacity-50 text-sm"
+                  className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-md transition duration-200 shadow-sm disabled:opacity-50 text-sm"
                 >
                   {updating ? 'Updating...' : 'Mark as Recovered'}
                 </button>
@@ -156,7 +154,7 @@ export default function ItemDetail() {
               {(isOwner || user?.role === 'admin') && (
                 <button
                   onClick={handleDelete}
-                  className="bg-rose-500/10 border border-rose-500/35 hover:bg-rose-500/20 text-rose-300 font-bold px-6 py-2.5 rounded-full transition cursor-pointer text-sm"
+                  className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 font-bold px-6 py-2.5 rounded-md transition duration-200 text-sm"
                 >
                   Delete Report
                 </button>

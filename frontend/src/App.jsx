@@ -1,7 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import ThemeToggle from './components/ThemeToggle';
 
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -15,10 +17,10 @@ const Reports = lazy(() => import('./pages/Reports'));
 
 function RouteFallback() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 flex items-center justify-center px-6">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 flex items-center justify-center px-6 transition-colors duration-300">
       <div className="text-center space-y-3">
-        <div className="w-10 h-10 mx-auto rounded-full border-2 border-cyan-400/30 border-t-cyan-300 animate-spin" />
-        <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Loading view</p>
+        <div className="w-10 h-10 mx-auto rounded-full border-2 border-cyan-400/30 border-t-cyan-500 animate-spin" />
+        <p className="text-sm uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">Loading view</p>
       </div>
     </div>
   );
@@ -26,9 +28,11 @@ function RouteFallback() {
 
 function App() {
   return (
-    <AuthProvider>
-      <Suspense fallback={<RouteFallback />}>
-        <BrowserRouter>
+    <ThemeProvider>
+      <AuthProvider>
+        <Suspense fallback={<RouteFallback />}>
+          <BrowserRouter>
+            <ThemeToggle />
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -85,6 +89,7 @@ function App() {
         </BrowserRouter>
       </Suspense>
     </AuthProvider>
+    </ThemeProvider>
   );
 }
 

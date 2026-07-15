@@ -51,36 +51,34 @@ export default function ReportItem() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-x-hidden py-10 px-4">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.12),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(16,185,129,0.08),_transparent_26%),linear-gradient(180deg,_rgba(15,23,42,1)_0%,_rgba(2,6,23,1)_100%)] fixed" />
-
-      <div className="relative max-w-lg mx-auto z-10">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 py-10 px-4">
+      <div className="max-w-lg mx-auto">
         <button
           onClick={() => navigate(-1)}
-          className="text-cyan-400 hover:text-cyan-300 transition mb-6 inline-flex items-center gap-1 text-sm font-semibold cursor-pointer"
+          className="text-blue-600 dark:text-blue-400 hover:underline transition mb-6 inline-flex items-center gap-1 text-sm font-semibold"
         >
           ← Back
         </button>
 
-        <div className="bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl">
-          <h2 className="text-3xl font-bold mb-6 text-white tracking-wide text-center">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-8 shadow-sm">
+          <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white text-center">
             Report an Item
           </h2>
 
           {error && (
-            <p className="text-rose-400 bg-rose-500/10 border border-rose-500/20 text-sm mb-4 py-2 px-3 rounded-lg text-center">
+            <p className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 text-sm mb-4 py-2 px-3 rounded-md text-center font-medium">
               {error}
             </p>
           )}
           {success && (
-            <p className="text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 text-sm mb-4 py-2 px-3 rounded-lg text-center">
+            <p className="text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-900/50 text-sm mb-4 py-2 px-3 rounded-md text-center font-medium">
               {success}
             </p>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="flex gap-4">
-              <label className={`flex-1 flex items-center justify-center gap-2 border rounded-xl py-3 cursor-pointer transition ${formData.type === 'lost' ? 'bg-rose-500/10 border-rose-500/50 text-rose-400 font-semibold' : 'border-white/10 bg-slate-950/40 text-slate-400 hover:bg-slate-900'}`}>
+              <label className={`flex-1 flex items-center justify-center gap-2 border rounded-md py-3 cursor-pointer transition ${formData.type === 'lost' ? 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 font-semibold' : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
                 <input
                   type="radio"
                   name="type"
@@ -91,7 +89,7 @@ export default function ReportItem() {
                 />
                 🔴 Lost Item
               </label>
-              <label className={`flex-1 flex items-center justify-center gap-2 border rounded-xl py-3 cursor-pointer transition ${formData.type === 'found' ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 font-semibold' : 'border-white/10 bg-slate-950/40 text-slate-400 hover:bg-slate-900'}`}>
+              <label className={`flex-1 flex items-center justify-center gap-2 border rounded-md py-3 cursor-pointer transition ${formData.type === 'found' ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-900/50 text-green-700 dark:text-green-400 font-semibold' : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
                 <input
                   type="radio"
                   name="type"
@@ -105,7 +103,7 @@ export default function ReportItem() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Item Title
               </label>
               <input
@@ -114,13 +112,13 @@ export default function ReportItem() {
                 placeholder="e.g. Blue Water Bottle, Black Leather Wallet"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200 placeholder:text-slate-600"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Detailed Description
               </label>
               <textarea
@@ -128,7 +126,7 @@ export default function ReportItem() {
                 placeholder="Describe key features, brand, color, serial numbers, or contents..."
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200 placeholder:text-slate-600"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                 rows="3"
                 required
               />
@@ -136,7 +134,7 @@ export default function ReportItem() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                   Category
                 </label>
                 <input
@@ -145,13 +143,13 @@ export default function ReportItem() {
                   placeholder="e.g. Electronics, Books"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200 placeholder:text-slate-600"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                   Location
                 </label>
                 <input
@@ -160,14 +158,14 @@ export default function ReportItem() {
                   placeholder="e.g. Main Library, Room 204"
                   value={formData.location}
                   onChange={handleChange}
-                  className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200 placeholder:text-slate-600"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Date {formData.type === 'lost' ? 'Lost' : 'Found'}
               </label>
               <div className="relative">
@@ -178,7 +176,7 @@ export default function ReportItem() {
                   onChange={handleChange}
                   max={new Date().toISOString().split('T')[0]}
                   min="2000-01-01"
-                  className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg pl-11 pr-4 py-3 outline-none transition duration-200 placeholder:text-slate-650 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md pl-11 pr-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:dark:invert"
                   required
                 />
                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
@@ -186,17 +184,17 @@ export default function ReportItem() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 ml-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Photo (optional)
               </label>
-              <div className="relative border border-dashed border-white/20 rounded-xl p-4 bg-slate-950/40 hover:bg-slate-950/60 transition flex flex-col items-center justify-center cursor-pointer min-h-[90px]">
+              <div className="relative border border-dashed border-slate-300 dark:border-slate-700 rounded-md p-4 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-900 transition flex flex-col items-center justify-center cursor-pointer min-h-[90px]">
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
                   className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                 />
-                <span className="text-sm text-cyan-400 font-medium text-center">
+                <span className="text-sm text-blue-600 dark:text-blue-400 font-medium text-center">
                   {photo ? `📁 ${photo.name}` : '📷 Select image file or drag here'}
                 </span>
               </div>
@@ -205,7 +203,7 @@ export default function ReportItem() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold py-3.5 rounded-full transition duration-200 uppercase tracking-wider text-sm cursor-pointer shadow-lg shadow-cyan-500/10 disabled:opacity-50 mt-6"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-md transition duration-200 shadow-sm disabled:opacity-50 mt-6"
             >
               {submitting ? 'Submitting Report...' : 'Submit Report'}
             </button>
