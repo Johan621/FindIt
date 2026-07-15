@@ -6,7 +6,8 @@ export default function Register() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    role: 'student'
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -101,6 +102,20 @@ export default function Register() {
               className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200 placeholder:text-slate-600"
               required
             />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 ml-1">
+              Role
+            </label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full bg-slate-950/60 border border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/20 text-white rounded-lg px-4 py-3 outline-none transition duration-200"
+            >
+              <option value="student" className="bg-slate-900 text-white">Student</option>
+              <option value="admin" className="bg-slate-900 text-white">Admin</option>
+            </select>
           </div>
         </div>
 
