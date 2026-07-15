@@ -174,6 +174,13 @@ export default function ReportItem() {
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
+                  onClick={(e) => {
+                    try {
+                      if (e.target.showPicker) e.target.showPicker();
+                    } catch (err) {
+                      // Ignore if unsupported
+                    }
+                  }}
                   max={new Date().toISOString().split('T')[0]}
                   min="2000-01-01"
                   className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md pl-11 pr-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:dark:invert"

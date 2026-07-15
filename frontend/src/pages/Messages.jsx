@@ -150,7 +150,7 @@ export default function Messages() {
 
     pollIntervalRef.current = setInterval(() => {
       void fetchMessages(true);
-    }, 4000);
+    }, 2000);
 
     return () => {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
