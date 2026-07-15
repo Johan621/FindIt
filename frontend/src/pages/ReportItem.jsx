@@ -1,7 +1,41 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar } from 'lucide-react';
 import API from '../api/axios';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconAnchor: [12, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
+function LocationMarker({ position, setPosition }) {
+  const map = useMapEvents({
+    click(e) {
+      setPosition(e.latlng);
+    },
+    locationfound(e) {
+      if (!position) {
+        setPosition(e.latlng);
+        map.flyTo(e.latlng, map.getZoom());
+      }
+    },
+  });
+
+  useEffect(() => {
+    map.locate();
+  }, [map]);
+
+  return position === null ? null : (
+    <Marker position={position}></Marker>
+  );
+}
 
 export default function ReportItem() {
   const [formData, setFormData] = useState({
@@ -10,6 +44,8 @@ export default function ReportItem() {
     category: '',
     type: 'lost',
     location: '',
+    lat: '',
+    lng: '',
     date: '',
     reward: ''
   });
@@ -163,6 +199,29 @@ export default function ReportItem() {
                   className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   required
                 />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5 flex justify-between">
+                  <span>Pinpoint Location on Map</span>
+                  <span className="text-xs text-slate-500 font-normal">Click to drop a pin</span>
+                </label>
+                <div className="h-64 w-full rounded-md overflow-hidden border border-slate-300 dark:border-slate-700 relative z-0">
+                  <MapContainer 
+                    center={[28.6139, 77.2090]} 
+                    zoom={13} 
+                    style={{ height: '100%', width: '100%' }}
+                  >
+                    <TileLayer
+                      attribution='&copy; OpenStreetMap'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <LocationMarker 
+                      position={formData.lat ? { lat: formData.lat, lng: formData.lng } : null} 
+                      setPosition={(pos) => setFormData({ ...formData, lat: pos.lat, lng: pos.lng })} 
+                    />
+                  </MapContainer>
+                </div>
               </div>
 
               {formData.type === 'lost' && (

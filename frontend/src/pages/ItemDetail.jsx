@@ -2,6 +2,18 @@ import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import API from '../api/axios';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconAnchor: [12, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 export default function ItemDetail() {
   const { id } = useParams();
@@ -139,6 +151,26 @@ export default function ItemDetail() {
                 {item.reportedBy?.name || 'Unknown'}
               </div>
             </div>
+
+            {item.coordinates && item.coordinates.lat && item.coordinates.lng && (
+              <div className="mb-8">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-200 mb-2">Location Map:</h3>
+                <div className="h-64 w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 relative z-0 shadow-sm print:hidden">
+                  <MapContainer 
+                    center={[item.coordinates.lat, item.coordinates.lng]} 
+                    zoom={15} 
+                    style={{ height: '100%', width: '100%' }}
+                    scrollWheelZoom={false}
+                  >
+                    <TileLayer
+                      attribution='&copy; OpenStreetMap'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={[item.coordinates.lat, item.coordinates.lng]} />
+                  </MapContainer>
+                </div>
+              </div>
+            )}
 
             {error && (
               <p className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 text-sm mb-4 py-2 px-3 rounded-md text-center font-medium">
