@@ -5,11 +5,19 @@ const User = require('../models/User');
 // Register
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, adminSecret } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
+    }
+
+    let assignedRole = 'student';
+    if (role === 'admin') {
+      if (adminSecret !== process.env.ADMIN_SECRET) {
+        return res.status(401).json({ message: 'Invalid admin secret code' });
+      }
+      assignedRole = 'admin';
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -18,7 +26,7 @@ exports.register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: role || 'student'
+      role: assignedRole
     });
 
     await newUser.save();
