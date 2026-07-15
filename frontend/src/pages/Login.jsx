@@ -59,7 +59,6 @@ export default function Login() {
           </div>
 
           <div>
-          <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Password
