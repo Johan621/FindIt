@@ -52,12 +52,20 @@ export default function Reports() {
         <h1 className="text-xl font-bold tracking-tight text-blue-600 dark:text-blue-400">
           Reports & Statistics
         </h1>
-        <button
-          onClick={() => navigate('/dashboard')}
-          className="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline"
-        >
-          Back to Dashboard
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={() => navigate('/messages')}
+            className="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline cursor-pointer"
+          >
+            Messages
+          </button>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline cursor-pointer"
+          >
+            Back to Dashboard
+          </button>
+        </div>
       </nav>
 
       <div className="p-6 max-w-7xl mx-auto">

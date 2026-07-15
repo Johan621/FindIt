@@ -145,16 +145,25 @@ export default function ItemDetail() {
                 <button
                   onClick={handleMarkRecovered}
                   disabled={updating}
-                  className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-md transition duration-200 shadow-sm disabled:opacity-50 text-sm"
+                  className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-md transition duration-200 shadow-sm disabled:opacity-50 text-sm cursor-pointer"
                 >
                   {updating ? 'Updating...' : 'Mark as Recovered'}
+                </button>
+              )}
+
+              {!isOwner && (
+                <button
+                  onClick={() => navigate(`/messages?item=${item._id}&recipient=${item.reportedBy?._id || item.reportedBy}`)}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-md transition duration-200 shadow-sm text-sm cursor-pointer"
+                >
+                  Chat with Reporter
                 </button>
               )}
 
               {(isOwner || user?.role === 'admin') && (
                 <button
                   onClick={handleDelete}
-                  className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 font-bold px-6 py-2.5 rounded-md transition duration-200 text-sm"
+                  className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 font-bold px-6 py-2.5 rounded-md transition duration-200 text-sm cursor-pointer"
                 >
                   Delete Report
                 </button>

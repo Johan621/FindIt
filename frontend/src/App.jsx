@@ -15,6 +15,7 @@ const AdminPanel = lazy(() => import('./pages/AdminPanel'));
 const ItemDetail = lazy(() => import('./pages/ItemDetail'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Profile = lazy(() => import('./pages/Profile'));
+const Messages = lazy(() => import('./pages/Messages'));
 
 function RouteFallback() {
   return (
@@ -90,6 +91,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <Messages />
                 </ProtectedRoute>
               }
             />

@@ -56,6 +56,13 @@ export default function Dashboard() {
             My Profile
           </button>
 
+          <button
+            onClick={() => navigate('/messages')}
+            className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white px-4 py-1.5 rounded-md transition font-medium shadow-md border border-transparent cursor-pointer"
+          >
+            Messages
+          </button>
+
           {user?.role === 'admin' && (
             <button
               onClick={() => navigate('/admin')}
