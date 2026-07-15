@@ -1,24 +1,27 @@
-import { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import API from '../api/axios';
-import { AuthContext } from '../context/AuthContext';
 
-export default function Login() {
+export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState('');
+  const [resetLink, setResetLink] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
+    setResetLink('');
+
     try {
-      const res = await API.post('/auth/login', { email, password });
-      login(res.data.token, res.data.user);
-      navigate('/dashboard');
+      const res = await API.post('/auth/forgotpassword', { email });
+      setSuccess(res.data.message);
+      if (res.data.resetLink) {
+        setResetLink(res.data.resetLink);
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Failed to send reset link');
     }
   };
 
@@ -33,14 +36,30 @@ export default function Login() {
             FindIt
           </Link>
           <h2 className="text-2xl font-bold mt-2 text-slate-900 dark:text-white">
-            Welcome Back
+            Reset Password
           </h2>
+          <p className="text-sm text-slate-500 mt-2">
+            Enter your email to receive a password reset link.
+          </p>
         </div>
 
         {error && (
           <p className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 text-sm mb-4 py-2 px-3 rounded-md text-center font-medium">
             {error}
           </p>
+        )}
+        {success && (
+          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-900/50 text-sm mb-4 py-3 px-4 rounded-md text-center">
+            <p className="text-green-600 dark:text-green-400 font-medium mb-2">{success}</p>
+            {resetLink && (
+              <a 
+                href={resetLink} 
+                className="inline-block bg-white dark:bg-slate-800 border border-green-200 dark:border-green-900/50 text-green-700 dark:text-green-300 font-bold px-4 py-2 rounded shadow-sm hover:bg-green-50 dark:hover:bg-slate-700 transition"
+              >
+                Click Here to Reset Password
+              </a>
+            )}
+          </div>
         )}
 
         <div className="space-y-4">
@@ -57,39 +76,19 @@ export default function Login() {
               required
             />
           </div>
-
-          <div>
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Password
-              </label>
-              <Link to="/forgot-password" className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
-                Forgot password?
-              </Link>
-            </div>
-            <input
-              type="password"
-              placeholder="•••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md px-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
-              required
-            />
-          </div>
         </div>
 
         <button
           type="submit"
           className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-md transition duration-200 shadow-sm"
         >
-          Login
+          Send Reset Link
         </button>
 
         <p className="text-sm text-center mt-6 text-slate-600 dark:text-slate-400">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-            Register
+          Remember your password?{' '}
+          <Link to="/login" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+            Login
           </Link>
         </p>
       </form>
