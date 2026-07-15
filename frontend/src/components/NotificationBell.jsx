@@ -39,16 +39,20 @@ export default function NotificationBell() {
 
   const handleNotificationClick = async (notif) => {
     try {
-      await API.patch(`/notifications/${notif._id}/read`);
-      setNotifications((prev) =>
-        prev.map((n) => (n._id === notif._id ? { ...n, read: true } : n))
-      );
-      if (notif.itemRef?._id) {
-        navigate(`/items/${notif.itemRef._id}`);
-        setOpen(false);
+      if (!notif.read) {
+        await API.patch(`/notifications/${notif._id}/read`);
+        setNotifications((prev) =>
+          prev.map((n) => (n._id === notif._id ? { ...n, read: true } : n))
+        );
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      const itemId = notif.itemRef?._id || (typeof notif.itemRef === 'string' ? notif.itemRef : null);
+      if (itemId) {
+        navigate(`/items/${itemId}`);
+        setOpen(false);
+      }
     }
   };
 

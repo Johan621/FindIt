@@ -26,13 +26,14 @@ exports.createItem = async (req, res) => {
 // Get all items with optional search/filter
 exports.getItems = async (req, res) => {
   try {
-    const { category, location, keyword, type, status } = req.query;
+    const { category, location, keyword, type, status, reportedBy } = req.query;
     const filter = {};
 
     if (category) filter.category = category;
     if (location) filter.location = { $regex: location, $options: 'i' };
     if (type) filter.type = type;
     if (status) filter.status = status;
+    if (reportedBy) filter.reportedBy = reportedBy;
     if (keyword) {
       filter.$or = [
         { title: { $regex: keyword, $options: 'i' } },

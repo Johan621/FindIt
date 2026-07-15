@@ -14,6 +14,7 @@ const SearchItems = lazy(() => import('./pages/SearchItems'));
 const AdminPanel = lazy(() => import('./pages/AdminPanel'));
 const ItemDetail = lazy(() => import('./pages/ItemDetail'));
 const Reports = lazy(() => import('./pages/Reports'));
+const Profile = lazy(() => import('./pages/Profile'));
 
 function RouteFallback() {
   return (
@@ -81,6 +82,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ItemDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />

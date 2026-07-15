@@ -23,55 +23,75 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
-      <nav className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-        <h1 className="text-xl font-bold tracking-tight text-blue-600 dark:text-blue-400">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100 via-white to-slate-50 dark:bg-none dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 relative">
+      {/* Attractive Background Overlays */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-60 dark:opacity-20 z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-gradient-to-br from-indigo-200 to-fuchsia-200 dark:from-indigo-900 dark:to-fuchsia-900 blur-3xl opacity-50" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-gradient-to-bl from-cyan-200 to-blue-200 dark:from-cyan-900 dark:to-blue-900 blur-3xl opacity-50" />
+      </div>
+
+      <nav className="bg-white/70 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4 relative z-50 shadow-sm">
+        <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-transparent">
           FindIt
         </h1>
         <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
-          <span className="text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 font-medium flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-blue-500 inline-block"></span>
-            {user?.name} <span className="text-xs text-blue-600 dark:text-blue-400 font-semibold uppercase">({user?.role})</span>
+          <span className="text-slate-600 dark:text-slate-300 bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-1.5 font-medium flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-indigo-500 inline-block"></span>
+            {user?.name} <span className="text-xs text-indigo-600 dark:text-indigo-400 font-semibold uppercase">({user?.role})</span>
           </span>
           
           <NotificationBell />
 
+          <button
+            onClick={() => navigate('/')}
+            className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-4 py-1.5 rounded-md transition font-medium shadow-md border border-transparent"
+          >
+            Home
+          </button>
+
+          <button
+            onClick={() => navigate('/profile')}
+            className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 text-white px-4 py-1.5 rounded-md transition font-medium shadow-md border border-transparent"
+          >
+            My Profile
+          </button>
+
           {user?.role === 'admin' && (
             <button
               onClick={() => navigate('/admin')}
-              className="bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-4 py-1.5 rounded-md hover:bg-purple-200 dark:hover:bg-purple-900/50 transition font-medium border border-purple-200 dark:border-purple-800"
+              className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-1.5 rounded-md transition font-medium shadow-md border border-transparent"
             >
               Admin Panel
             </button>
           )}
           <button
             onClick={() => navigate('/report')}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md transition font-medium shadow-sm"
+            className="bg-gradient-to-r from-indigo-500 to-fuchsia-500 hover:from-indigo-600 hover:to-fuchsia-600 text-white px-4 py-1.5 rounded-md transition font-medium shadow-md border border-transparent"
           >
             Report Item
           </button>
           <button
             onClick={() => navigate('/search')}
-            className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-1.5 rounded-md transition font-medium shadow-sm"
+            className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white px-4 py-1.5 rounded-md transition font-medium shadow-md border border-transparent"
           >
             Search
           </button>
           <button
             onClick={() => navigate('/reports')}
-            className="bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 px-4 py-1.5 rounded-md hover:bg-teal-100 dark:hover:bg-teal-900/50 transition font-medium border border-teal-200 dark:border-teal-800"
+            className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-500 hover:to-emerald-600 text-white px-4 py-1.5 rounded-md transition font-medium shadow-md border border-transparent"
           >
             Reports
           </button>
           <button
             onClick={handleLogout}
-            className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 px-4 py-1.5 rounded-md transition font-medium"
+            className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white px-4 py-1.5 rounded-md transition font-medium shadow-md border border-transparent"
           >
             Logout
           </button>
         </div>
       </nav>
 
-      <div className="p-6 max-w-7xl mx-auto">
+      <div className="p-6 max-w-7xl mx-auto relative z-10">
         <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-3">
           <span>Recent Items</span>
           <span className="text-sm font-medium text-slate-600 dark:text-slate-400 bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md">

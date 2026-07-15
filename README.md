@@ -39,8 +39,8 @@ FindIt is a modern, full-stack lost-and-found platform designed to reconnect peo
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Johan621/FindIt----Campus-things-lost-and-found.git
-   cd FindIt----Campus-things-lost-and-found
+   git clone https://github.com/Johan621/FindIt.git
+   cd FindIt
    ```
 
 2. Install dependencies for both the frontend and the backend server:
