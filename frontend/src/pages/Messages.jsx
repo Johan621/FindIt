@@ -29,11 +29,11 @@ export default function Messages() {
   // Fetch list of conversations
   const fetchConversations = useCallback(async (selectDefault = false) => {
     try {
-      const res = await API.get('/api/messages/conversations');
+      const res = await API.get('/messages/conversations');
       setConversations(res.data);
       
       // If we need to auto-select a conversation (e.g. on first load)
-      if (selectDefault && res.data.length > 0) {
+      if (selectDefault) {
         const itemParam = searchParams.get('item');
         const recipientParam = searchParams.get('recipient');
         
@@ -61,10 +61,7 @@ export default function Messages() {
   const setupNewConversation = async (itemId, recipientId) => {
     try {
       setLoadingMessages(true);
-      const [itemRes, userRes] = await Promise.all([
-        API.get(`/items/${itemId}`),
-        API.get(`/api/auth/me`) // We can't fetch other user directly without endpoint, but we can verify item owner or similar.
-      ]);
+      const itemRes = await API.get(`/items/${itemId}`);
 
       const itemData = itemRes.data;
       
@@ -110,7 +107,7 @@ export default function Messages() {
       if (!isPolling) setLoadingMessages(true);
       
       const res = await API.get(
-        `/api/messages/conversation/${activeConversation.item._id}/${activeConversation.otherUser._id}`
+        `/messages/conversation/${activeConversation.item._id}/${activeConversation.otherUser._id}`
       );
       
       setMessages(res.data);
@@ -172,7 +169,7 @@ export default function Messages() {
 
     setSendingMessage(true);
     try {
-      const res = await API.post('/api/messages', {
+      const res = await API.post('/messages', {
         recipientId: activeConversation.otherUser._id,
         itemId: activeConversation.item._id,
         content: newMessageText.trim()
