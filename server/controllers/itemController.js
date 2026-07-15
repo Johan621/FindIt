@@ -1,5 +1,6 @@
 const Item = require('../models/Item');
 const Notification = require('../models/Notification');
+const User = require('../models/User');
 // Create new item (lost or found report)
 exports.createItem = async (req, res) => {
   try {
@@ -17,6 +18,18 @@ exports.createItem = async (req, res) => {
     });
 
     await newItem.save();
+
+    // Notify all admins about the new pending item
+    const admins = await User.find({ role: 'admin' });
+    if (admins.length > 0) {
+      const adminNotifications = admins.map(admin => ({
+        user: admin._id,
+        message: `New pending ${type} item reported: "${title}". Needs verification.`,
+        itemRef: newItem._id
+      }));
+      await Notification.insertMany(adminNotifications);
+    }
+
     res.status(201).json(newItem);
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
