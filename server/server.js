@@ -64,6 +64,7 @@ async function startServer() {
   const itemRoutes = require('./routes/itemRoutes');
   const authRoutes = require('./routes/authRoutes');
   const notificationRoutes = require('./routes/notificationRoutes');
+  const messageRoutes = require('./routes/messageRoutes');
 
   app.get('/', (req, res) => {
     res.send('Lost and Found API is running...');
@@ -72,6 +73,7 @@ async function startServer() {
   app.use('/api/notifications', notificationRoutes);  
   app.use('/api/auth', authRoutes);
   app.use('/api/items', itemRoutes);
+  app.use('/api/messages', messageRoutes);
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {

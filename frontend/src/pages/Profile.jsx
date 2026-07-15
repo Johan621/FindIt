@@ -42,12 +42,20 @@ export default function Profile() {
         <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-transparent">
           My Profile
         </h1>
-        <button
-          onClick={() => navigate('/dashboard')}
-          className="text-indigo-600 dark:text-indigo-400 font-semibold text-sm hover:underline"
-        >
-          Back to Dashboard
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={() => navigate('/messages')}
+            className="text-indigo-600 dark:text-indigo-400 font-semibold text-sm hover:underline cursor-pointer"
+          >
+            Messages
+          </button>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="text-indigo-600 dark:text-indigo-400 font-semibold text-sm hover:underline cursor-pointer"
+          >
+            Back to Dashboard
+          </button>
+        </div>
       </nav>
 
       <div className="p-6 max-w-7xl mx-auto relative z-10">
