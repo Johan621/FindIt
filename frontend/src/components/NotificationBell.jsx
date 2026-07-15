@@ -21,7 +21,7 @@ export default function NotificationBell() {
     void (async () => {
       await fetchNotifications();
     })();
-    const interval = setInterval(fetchNotifications, 15000); // poll every 15s
+    const interval = setInterval(fetchNotifications, 60000); // poll every 60s
     return () => clearInterval(interval);
   }, []);
 

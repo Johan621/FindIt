@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import API from '../api/axios';
 import NotificationBell from '../components/NotificationBell';
+import { optimizeImage } from '../utils/imageOptimizer';
 
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
@@ -126,7 +127,7 @@ export default function Dashboard() {
                   {item.photoUrl && (
                     <div className="overflow-hidden rounded-lg mb-4 h-44 border border-slate-100 dark:border-slate-800">
                       <img
-                        src={item.photoUrl}
+                        src={optimizeImage(item.photoUrl)}
                         alt={item.title}
                         className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
                       />

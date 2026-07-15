@@ -137,7 +137,7 @@ export default function Messages() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  // Poll for new messages every 4 seconds when conversation is active
+  // Poll for new messages every 10 seconds when conversation is active
   useEffect(() => {
     if (!activeConversation || activeConversation.isTemp) {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
@@ -150,7 +150,7 @@ export default function Messages() {
 
     pollIntervalRef.current = setInterval(() => {
       void fetchMessages(true);
-    }, 2000);
+    }, 10000);
 
     return () => {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
