@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar } from 'lucide-react';
 import API from '../api/axios';
@@ -10,13 +10,15 @@ export default function ReportItem() {
     category: '',
     type: 'lost',
     location: '',
-    date: ''
+    date: '',
+    reward: ''
   });
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const dateInputRef = useRef(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -162,6 +164,25 @@ export default function ReportItem() {
                   required
                 />
               </div>
+
+              {formData.type === 'lost' && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-2">
+                    Reward Amount <span className="text-xs text-slate-500 font-normal">(Optional)</span>
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                    <input
+                      type="text"
+                      name="reward"
+                      placeholder="e.g. 50"
+                      value={formData.reward}
+                      onChange={handleChange}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md pl-8 pr-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div>
@@ -170,23 +191,19 @@ export default function ReportItem() {
               </label>
               <div className="relative">
                 <input
+                  ref={dateInputRef}
                   type="date"
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
-                  onClick={(e) => {
-                    try {
-                      if (e.target.showPicker) e.target.showPicker();
-                    } catch (err) {
-                      // Ignore if unsupported
-                    }
-                  }}
                   max={new Date().toISOString().split('T')[0]}
                   min="2000-01-01"
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md pl-11 pr-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:dark:invert"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md pl-11 pr-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                   required
                 />
-                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                <Calendar 
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" 
+                />
               </div>
             </div>
 

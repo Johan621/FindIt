@@ -13,6 +13,7 @@ exports.createItem = async (req, res) => {
       type,
       location,
       date,
+      reward: req.body.reward || '',
       photoUrl: req.file ? req.file.path : '',
       reportedBy: req.user.id
     });

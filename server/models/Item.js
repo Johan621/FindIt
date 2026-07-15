@@ -32,6 +32,10 @@ const itemSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  reward: {
+    type: String,
+    default: ''
+  },
   status: {
     type: String,
     enum: ['pending', 'verified', 'matched', 'recovered', 'rejected'],

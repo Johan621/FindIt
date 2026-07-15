@@ -43,6 +43,34 @@ export default function AdminPanel() {
     }
   };
 
+  const handleExportCSV = () => {
+    if (items.length === 0) return;
+    const headers = ['ID', 'Title', 'Type', 'Category', 'Location', 'Reported By Email', 'Date Reported'];
+    const csvRows = [headers.join(',')];
+
+    items.forEach(item => {
+      const row = [
+        item._id,
+        `"${item.title.replace(/"/g, '""')}"`,
+        item.type,
+        `"${item.category}"`,
+        `"${item.location}"`,
+        item.reportedBy?.email || 'Unknown',
+        new Date(item.date).toLocaleDateString()
+      ];
+      csvRows.push(row.join(','));
+    });
+
+    const csvContent = csvRows.join('\\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pending_items_export_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
       <nav className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex justify-between items-center">
@@ -72,12 +100,21 @@ export default function AdminPanel() {
           </p>
         )}
 
-        <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-3">
-          <span>Pending Verification</span>
-          <span className="text-sm font-medium text-slate-600 dark:text-slate-400 bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md">
-            {items.length} left
-          </span>
-        </h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+            <span>Pending Verification</span>
+            <span className="text-sm font-medium text-slate-600 dark:text-slate-400 bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md">
+              {items.length} left
+            </span>
+          </h2>
+          <button
+            onClick={handleExportCSV}
+            disabled={items.length === 0}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-md transition shadow-sm text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Export to CSV
+          </button>
+        </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
