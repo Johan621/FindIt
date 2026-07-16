@@ -13,7 +13,6 @@ exports.createItem = async (req, res) => {
       type,
       location,
       date,
-      reward: req.body.reward || '',
       coordinates: (req.body.lat && req.body.lng) ? { lat: Number(req.body.lat), lng: Number(req.body.lng) } : undefined,
       photoUrl: req.file ? req.file.path : '',
       reportedBy: req.user.id

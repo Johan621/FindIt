@@ -123,12 +123,6 @@ export default function ItemDetail() {
               >
                 {item.type.toUpperCase()}
               </span>
-              
-              {item.reward && (
-                <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-md font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-700/50 shadow-sm">
-                  <span className="text-sm">💰</span> Reward: ${item.reward}
-                </span>
-              )}
             </div>
 
             <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 text-base bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4">

@@ -46,8 +46,7 @@ export default function ReportItem() {
     location: '',
     lat: '',
     lng: '',
-    date: '',
-    reward: ''
+    date: ''
   });
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState('');
@@ -223,26 +222,7 @@ export default function ReportItem() {
                   </MapContainer>
                 </div>
               </div>
-
-              {formData.type === 'lost' && (
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-2">
-                    Reward Amount <span className="text-xs text-slate-500 font-normal">(Optional)</span>
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
-                    <input
-                      type="text"
-                      name="reward"
-                      placeholder="e.g. 50"
-                      value={formData.reward}
-                      onChange={handleChange}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white rounded-md pl-8 pr-4 py-2.5 outline-none transition duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
+              </div>
 
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
