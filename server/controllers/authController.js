@@ -8,6 +8,10 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password, role, adminSecret } = req.body;
 
+    if (!email.match(/\.(edu(\.[a-z]{2,})?|ac\.[a-z]{2,}|college|university|academy|school|institute|education|study)$/i)) {
+      return res.status(400).json({ message: 'Only college/educational email addresses are allowed.' });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
@@ -43,9 +47,17 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    if (!email.match(/\.(edu(\.[a-z]{2,})?|ac\.[a-z]{2,}|college|university|academy|school|institute|education|study)$/i)) {
+      return res.status(400).json({ message: 'Only college/educational email addresses are allowed.' });
+    }
+
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    if (user.isBlocked) {
+      return res.status(403).json({ message: 'Your account has been blocked due to policy violations.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -144,6 +156,19 @@ exports.resetPassword = async (req, res) => {
     await user.save();
 
     res.status(200).json({ success: true, message: 'Password reset successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+// Get user by ID (for chat context)
+exports.getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password -resetPasswordToken -resetPasswordExpire');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }

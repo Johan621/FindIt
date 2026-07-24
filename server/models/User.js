@@ -23,7 +23,11 @@ const userSchema = new mongoose.Schema({
     default: 'student'
   },
   resetPasswordToken: String,
-  resetPasswordExpire: Date
+  resetPasswordExpire: Date,
+  isBlocked: {
+    type: Boolean,
+    default: false
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

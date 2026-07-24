@@ -6,6 +6,26 @@ exports.createItem = async (req, res) => {
   try {
     const { title, description, category, type, location, date } = req.body;
 
+    const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+    const recentItemsCount = await Item.countDocuments({
+      reportedBy: req.user.id,
+      createdAt: { $gte: fifteenMinutesAgo }
+    });
+
+    if (recentItemsCount >= 2) {
+      const user = await User.findByIdAndUpdate(
+        req.user.id,
+        { $inc: { spamAttempts: 1 } },
+        { new: true }
+      );
+      if (user.spamAttempts >= 5) {
+        user.isBlocked = true;
+        await user.save();
+        return res.status(403).json({ message: 'Your account has been blocked for repeatedly posting items rapidly. Please contact support.' });
+      }
+      return res.status(429).json({ message: 'Warning: You are posting items too rapidly. Further attempts will result in an account ban. Please wait 15 minutes before posting again.' });
+    }
+
     const newItem = new Item({
       title,
       description,
@@ -49,10 +69,8 @@ exports.getItems = async (req, res) => {
     if (status) filter.status = status;
     if (reportedBy) filter.reportedBy = reportedBy;
     if (keyword) {
-      filter.$or = [
-        { title: { $regex: keyword, $options: 'i' } },
-        { description: { $regex: keyword, $options: 'i' } }
-      ];
+      // Use the text index for faster and more relevant search
+      filter.$text = { $search: keyword };
     }
 
     const items = await Item.find(filter)

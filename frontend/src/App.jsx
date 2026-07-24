@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ThemeToggle from './components/ThemeToggle';
+import Footer from './components/Footer';
 
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -18,6 +19,7 @@ const ItemDetail = lazy(() => import('./pages/ItemDetail'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Messages = lazy(() => import('./pages/Messages'));
+const ContactSupport = lazy(() => import('./pages/ContactSupport'));
 
 function RouteFallback() {
   return (
@@ -36,79 +38,85 @@ function App() {
       <AuthProvider>
         <Suspense fallback={<RouteFallback />}>
           <BrowserRouter>
-            <ThemeToggle />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <AdminPanel />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/reports"
-              element={
-                <ProtectedRoute>
-                  <Reports />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/search"
-              element={
-                <ProtectedRoute>
-                  <SearchItems />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/report"
-              element={
-                <ProtectedRoute>
-                  <ReportItem />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/items/:id"
-              element={
-                <ProtectedRoute>
-                  <ItemDetail />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/messages"
-              element={
-                <ProtectedRoute>
-                  <Messages />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/" element={<Landing />} />
-          </Routes>
-        </BrowserRouter>
+            <div className="flex flex-col min-h-screen relative">
+              <ThemeToggle />
+              <div className="flex-grow">
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password/:token" element={<ResetPassword />} />
+                  <Route path="/contact-support" element={<ContactSupport />} />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin"
+                    element={
+                      <ProtectedRoute>
+                        <AdminPanel />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/reports"
+                    element={
+                      <ProtectedRoute>
+                        <Reports />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/search"
+                    element={
+                      <ProtectedRoute>
+                        <SearchItems />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/report"
+                    element={
+                      <ProtectedRoute>
+                        <ReportItem />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/items/:id"
+                    element={
+                      <ProtectedRoute>
+                        <ItemDetail />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/messages"
+                    element={
+                      <ProtectedRoute>
+                        <Messages />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/" element={<Landing />} />
+                </Routes>
+              </div>
+              <Footer />
+            </div>
+          </BrowserRouter>
       </Suspense>
     </AuthProvider>
     </ThemeProvider>

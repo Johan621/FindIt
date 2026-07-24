@@ -9,8 +9,8 @@ exports.sendMessage = async (req, res) => {
     const { recipientId, itemId, content } = req.body;
     const senderId = req.user.id;
 
-    if (!recipientId || !itemId || !content || !content.trim()) {
-      return res.status(400).json({ message: 'Recipient, Item, and Content are required.' });
+    if (!recipientId || !content || !content.trim()) {
+      return res.status(400).json({ message: 'Recipient and Content are required.' });
     }
 
     if (recipientId === senderId) {
@@ -23,17 +23,22 @@ exports.sendMessage = async (req, res) => {
       return res.status(404).json({ message: 'Recipient user not found.' });
     }
 
-    const item = await Item.findById(itemId);
-    if (!item) {
-      return res.status(404).json({ message: 'Item not found.' });
+    let item = null;
+    if (itemId && itemId !== 'system') {
+      item = await Item.findById(itemId);
+      if (!item) {
+        return res.status(404).json({ message: 'Item not found.' });
+      }
     }
 
     const newMessage = new Message({
       sender: senderId,
       recipient: recipientId,
-      item: itemId,
       content: content.trim()
     });
+    if (itemId && itemId !== 'system') {
+      newMessage.item = itemId;
+    }
 
     await newMessage.save();
 
@@ -42,8 +47,8 @@ exports.sendMessage = async (req, res) => {
     const senderName = senderUser ? senderUser.name : 'Another user';
     await Notification.create({
       user: recipientId,
-      message: `${senderName} sent you a message about "${item.title}".`,
-      itemRef: item._id
+      message: item ? `${senderName} sent you a message about "${item.title}".` : `${senderName} sent you a message.`,
+      itemRef: item ? item._id : undefined
     });
 
     // Populate sender and recipient details before returning
@@ -74,16 +79,15 @@ exports.getConversations = async (req, res) => {
     const conversationsMap = {};
 
     for (const msg of messages) {
-      if (!msg.item) continue;
-      
       const otherUser = msg.sender._id.toString() === userId ? msg.recipient : msg.sender;
       if (!otherUser) continue;
 
-      const key = `${msg.item._id}_${otherUser._id}`;
+      const itemIdString = msg.item ? msg.item._id.toString() : 'system';
+      const key = `${itemIdString}_${otherUser._id}`;
 
       if (!conversationsMap[key]) {
         conversationsMap[key] = {
-          item: msg.item,
+          item: msg.item || { _id: 'system', title: 'Admin Support', type: 'system', status: 'active' },
           otherUser: {
             _id: otherUser._id,
             name: otherUser.name,
@@ -115,27 +119,36 @@ exports.getMessagesForConversation = async (req, res) => {
     const userId = req.user.id;
     const { itemId, otherUserId } = req.params;
 
-    const messages = await Message.find({
-      item: itemId,
+    const query = {
       $or: [
         { sender: userId, recipient: otherUserId },
         { sender: otherUserId, recipient: userId }
       ]
-    })
+    };
+    if (itemId && itemId !== 'system') {
+      query.item = itemId;
+    } else {
+      query.item = { $exists: false };
+    }
+
+    const messages = await Message.find(query)
       .populate('sender', 'name email')
       .populate('recipient', 'name email')
       .sort({ createdAt: 1 });
 
+    const updateQuery = {
+      sender: otherUserId,
+      recipient: userId,
+      read: false
+    };
+    if (itemId && itemId !== 'system') {
+      updateQuery.item = itemId;
+    } else {
+      updateQuery.item = { $exists: false };
+    }
+
     // Mark messages sent by the other user as read
-    await Message.updateMany(
-      {
-        item: itemId,
-        sender: otherUserId,
-        recipient: userId,
-        read: false
-      },
-      { read: true }
-    );
+    await Message.updateMany(updateQuery, { read: true });
 
     res.status(200).json(messages);
   } catch (err) {
@@ -149,15 +162,18 @@ exports.markConversationAsRead = async (req, res) => {
     const userId = req.user.id;
     const { itemId, otherUserId } = req.params;
 
-    await Message.updateMany(
-      {
-        item: itemId,
-        sender: otherUserId,
-        recipient: userId,
-        read: false
-      },
-      { read: true }
-    );
+    const updateQuery = {
+      sender: otherUserId,
+      recipient: userId,
+      read: false
+    };
+    if (itemId && itemId !== 'system') {
+      updateQuery.item = itemId;
+    } else {
+      updateQuery.item = { $exists: false };
+    }
+
+    await Message.updateMany(updateQuery, { read: true });
 
     res.status(200).json({ message: 'Conversation marked as read.' });
   } catch (err) {

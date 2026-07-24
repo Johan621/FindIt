@@ -53,4 +53,12 @@ const itemSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+// Indexes for performance
+itemSchema.index({ status: 1, type: 1, createdAt: -1 });
+itemSchema.index({ reportedBy: 1, createdAt: -1 });
+itemSchema.index({ category: 1 });
+itemSchema.index({ location: 1 });
+// Text index for search keyword
+itemSchema.index({ title: 'text', description: 'text' });
+
 module.exports = mongoose.model('Item', itemSchema);

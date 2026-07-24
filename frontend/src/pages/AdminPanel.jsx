@@ -7,6 +7,7 @@ export default function AdminPanel() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
+  const [blockedUsers, setBlockedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionError, setActionError] = useState('');
 
@@ -15,6 +16,8 @@ export default function AdminPanel() {
     try {
       const res = await API.get('/items', { params: { status: 'pending' } });
       setItems(res.data);
+      const resUsers = await API.get('/admin/blocked-users');
+      setBlockedUsers(resUsers.data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -40,6 +43,18 @@ export default function AdminPanel() {
       setItems((prev) => prev.filter((item) => item._id !== id));
     } catch (err) {
       setActionError(err.response?.data?.message || 'Action failed');
+    }
+  };
+
+  const handleUnblockAndMessage = async (userId, userEmail) => {
+    setActionError('');
+    try {
+      await API.put(`/admin/users/${userId}/unblock`);
+      setBlockedUsers((prev) => prev.filter((u) => u._id !== userId));
+      // Navigate to messages using search params for the "system" item
+      navigate(`/messages?item=system&recipient=${userId}`);
+    } catch (err) {
+      setActionError(err.response?.data?.message || 'Failed to unblock user');
     }
   };
 
@@ -171,6 +186,44 @@ export default function AdminPanel() {
             ))}
           </div>
         )}
+
+        {/* Blocked Users Section */}
+        <div className="mt-12">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+              <span>Blocked Users</span>
+              <span className="text-sm font-medium text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 px-2.5 py-1 rounded-md">
+                {blockedUsers.length} total
+              </span>
+            </h2>
+          </div>
+          
+          {blockedUsers.length === 0 ? (
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-8 text-center shadow-sm">
+              <p className="text-slate-500 dark:text-slate-400">No blocked users. Great!</p>
+            </div>
+          ) : (
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+              <ul className="divide-y divide-slate-200 dark:divide-slate-800">
+                {blockedUsers.map((u) => (
+                  <li key={u._id} className="p-4 sm:px-6 hover:bg-slate-50 dark:hover:bg-slate-800/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors">
+                    <div>
+                      <p className="text-sm font-medium text-slate-900 dark:text-white">{u.name}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">{u.email}</p>
+                      <p className="text-xs text-red-500 mt-1">Spam Attempts: {u.spamAttempts}</p>
+                    </div>
+                    <button
+                      onClick={() => handleUnblockAndMessage(u._id, u.email)}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1.5 px-4 rounded text-sm transition"
+                    >
+                      Unblock & Message
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

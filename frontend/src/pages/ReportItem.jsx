@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import { Calendar } from 'lucide-react';
 import API from '../api/axios';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
@@ -53,6 +54,7 @@ export default function ReportItem() {
   const [success, setSuccess] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
   const dateInputRef = useRef(null);
 
   const handleChange = (e) => {
@@ -81,7 +83,20 @@ export default function ReportItem() {
       setSuccess('Item reported successfully!');
       setTimeout(() => navigate('/dashboard'), 1200);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to report item');
+      if (err.response?.status === 403) {
+        setError(
+          <span>
+            {err.response?.data?.message || 'Failed to report item'}{' '}
+            <a href="/contact-support" className="underline font-bold ml-1 text-indigo-200 hover:text-white">Contact Support</a>
+          </span>
+        );
+        setTimeout(() => {
+          logout();
+          navigate('/login');
+        }, 3000);
+      } else {
+        setError(err.response?.data?.message || 'Failed to report item');
+      }
     } finally {
       setSubmitting(false);
     }
